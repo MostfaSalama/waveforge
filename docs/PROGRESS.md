@@ -345,3 +345,16 @@
   - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
   - `node .\node_modules\vitest\vitest.mjs run`: passed (9 test files passed; 124 tests passed, 1 skipped integration test)
 - **Open issues**: None.
+
+## 2026-11-18 - Step 15: Phase 2A - Check R11 (Contract Storage TTL Extension)
+- **What was built**:
+  - Implemented `r11Check` in `src/repo/r11.ts` to inspect Soroban Rust contract sources (`*.rs`) for storage lifetime management calls (`extend_ttl`, `extend_ttl_instance`, `extend_instance_ttl`), ignoring comment lines and returning `skipped` when no Soroban crates are detected, `pass` with `file:line` evidence when present, and `warn` with remediation guidance when absent.
+  - Registered `r11Check` in `src/repo/index.ts` (`repoChecks` and exports).
+  - Updated `test/index.test.ts` to expect `R1`–`R11` (11 repo checks).
+  - Added unit and integration tests in `test/r11.test.ts` (4 tests).
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (10 test files passed; 128 passed, 1 skipped integration test)
+- **Open issues**: None.
