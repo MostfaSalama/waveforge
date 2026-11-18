@@ -6,7 +6,7 @@ WaveForge is a TypeScript library and CLI tool that helps Soroban repository mai
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![node version](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
 
-**Current release**: `v0.1.1` · **Network**: Stellar testnet and mainnet (read-only) · **Status**: Published on npm
+**Current release**: `v0.2.0` · **Network**: Stellar testnet and mainnet (read-only) · **Status**: Published on npm
 
 ---
 
@@ -38,7 +38,7 @@ The `waveforge` binary provides three primary commands: `repo`, `issue`, and `in
 
 ### 1. Repository Readiness (`waveforge repo`)
 
-Evaluates the target Soroban/Stellar repository against all checks R1 through R10.
+Evaluates the target Soroban/Stellar repository against all checks R1 through R13.
 
 ```bash
 # Run readiness checks on the current repository
@@ -47,6 +47,9 @@ waveforge repo .
 # Run on a specific repository path
 waveforge repo /path/to/soroban-project
 
+# Scaffold missing community files and issue templates
+waveforge repo . --fix
+
 # Run offline (network checks return skipped instead of failing)
 waveforge repo . --offline
 
@@ -54,9 +57,10 @@ waveforge repo . --offline
 waveforge repo . --network=testnet
 waveforge repo . --network=mainnet --rpc-url=https://mainnet.sorobanrpc.com
 
-# Format output as JSON or Markdown
+# Format output as JSON, Markdown, or SARIF v2.1.0
 waveforge repo . --json
 waveforge repo . --markdown
+waveforge repo . --format=sarif
 
 # Enforce a minimum score threshold (exits with 1 if below threshold)
 waveforge repo . --min-score=90
@@ -101,7 +105,7 @@ waveforge init-action --force --ref=my-org/waveforge-action@v1
 
 ---
 
-## Repository Readiness Checks (R1–R10)
+## Repository Readiness Checks (R1–R13)
 
 Every check has an id, a title, a one-line message, and a fix. Network checks return `skipped` when `--offline` is set or the network is unreachable. Secrets are masked as `SXXXX...last4`.
 
@@ -117,6 +121,9 @@ Every check has an id, a title, a one-line message, and a fix. Network checks re
 | **`R8`** | **On-Chain Contract Verification**: Verifies contract IDs documented in README exist on-chain via Stellar RPC (offline-safe: returns `skipped` when offline). | Validates that contract addresses documented for contributors are live on-chain, preventing stale or phantom IDs. |
 | **`R9`** | **Wasm Compilation Target**: Scans docs and scripts for deprecated `wasm32-unknown-unknown` target. | Prevents broken builds and compilation mismatches by ensuring projects target current Stellar CLI standards (`wasm32v1-none`). |
 | **`R10`** | **Secret Key and Environment Safety**: Scans tracked files for Stellar secret seeds (`S...`) and committed `.env` files (except `.env.example`). | Protects repositories from leaked cryptographic credentials, compromised test accounts, and accidental secret commits. |
+| **`R11`** | **Contract Storage TTL Extension**: Scans Soroban Rust sources for `extend_ttl`, `extend_ttl_instance`, and `extend_instance_ttl` calls. | Ensures deployed Soroban contracts actively manage storage lifetimes to avoid state archival under Protocol 20+. |
+| **`R12`** | **Contract State Authorization**: Statically analyzes state-mutating `pub fn` contract functions for `require_auth` / `require_auth_for_args`. | Catches missing caller authorization checks in public contract entrypoints before deployment. |
+| **`R13`** | **Automated Deployment Scripts**: Detects `scripts/deploy.*`, `package.json` deploy scripts, and `Makefile` `deploy:` targets. | Provides contributors with reproducible testnet deployment workflows out of the box. |
 
 ---
 

@@ -5,6 +5,21 @@ All notable changes to `waveforge-stellar` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-11-18
+
+### Added
+- **Soroban Protocol 20+ Deep Contract Checks (R11–R13)**:
+  - `R11`: Contract Storage TTL Extension (scans Soroban Rust sources for `extend_ttl`, `extend_ttl_instance`, and `extend_instance_ttl` calls).
+  - `R12`: Contract State Authorization (statically analyzes state-mutating `pub fn` contract functions to verify `require_auth()` / `require_auth_for_args()` usage).
+  - `R13`: Automated Deployment Scripts (detects `scripts/deploy.*`, `package.json` `deploy*` scripts, and `Makefile` `deploy:` targets).
+- **SARIF v2.1.0 Export**:
+  - Exported `formatSarif(report)` from `waveforge-stellar` and added `--format=sarif` / `--sarif` CLI flags for GitHub Code Scanning integration.
+- **Active Scaffolding (`--fix`)**:
+  - Added `--fix` (and `--force` override) to `waveforge repo` to scaffold missing `CONTRIBUTING.md`, `SECURITY.md`, and `.github/ISSUE_TEMPLATE/{config,bug,feature}.yml` files.
+
+### Fixed
+- **Test Stability**: Isolated multi-format CLI integration tests in `test/cli.test.ts` and raised `vitest.config.ts` `testTimeout` to `45000` ms to eliminate Windows/CI timeout flakiness.
+
 ## [0.1.1] - 2026-10-19
 
 ### Fixed

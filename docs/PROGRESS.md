@@ -410,3 +410,17 @@
   - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
   - `node .\node_modules\vitest\vitest.mjs run`: passed (14 test files passed; 143 passed, 1 skipped integration test)
 - **Open issues**: None.
+
+## 2026-11-18 - Step 20: Phase 5 - Documentation, API Contract, and v0.2.0 Release Preparation
+- **What was built**:
+  - Bumped package version in `package.json` from `0.1.1` to `0.2.0` to reflect new checks (`R11`–`R13`), `formatSarif` API export, and `--fix` scaffolding.
+  - Updated `CHANGELOG.md` with the `[0.2.0]` release notes.
+  - Updated `docs/API.md` to document `formatSarif(report)` and checks `R1`–`R13`.
+  - Updated `README.md` with `v0.2.0` release badge, `--fix` and `--format=sarif` CLI examples, and `R11`–`R13` documentation rows.
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
+  - `node dist/cli.js repo . --offline`: passed (100% score; R1–R6, R9–R10 PASS; R7, R8, R11–R13 SKIP)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (14 test files passed; 143 passed, 1 skipped integration test)
+- **Open issues**: None.

@@ -19,7 +19,7 @@ Any breaking change to exported signatures or return types requires a major vers
 
 ### 1. `runRepoChecks(repoPath?: string, options?: RepoOptions): Promise<Report>`
 
-Executes repository readiness checks `R1` through `R10` on the specified folder path.
+Executes repository readiness checks `R1` through `R13` on the specified folder path.
 
 #### Signature
 ```typescript
@@ -192,6 +192,24 @@ function formatJson(report: Report): string;
 import { formatJson } from "waveforge-stellar";
 
 const jsonString = formatJson(report);
+```
+
+---
+
+### 7. `formatSarif(report: Report): string`
+
+Formats a `Report` object into a SARIF v2.1.0 JSON string suitable for GitHub Code Scanning and CI security integrations.
+
+#### Signature
+```typescript
+function formatSarif(report: Report): string;
+```
+
+#### Example
+```typescript
+import { formatSarif } from "waveforge-stellar";
+
+const sarifJson = formatSarif(report);
 ```
 
 ---
