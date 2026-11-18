@@ -5,10 +5,10 @@ import { repoChecks } from "../src/repo/index.js";
 import { issueRules } from "../src/issue/rules.js";
 
 describe("waveforge scaffold", () => {
-  it("defines R1-R12 repo checks", () => {
-    expect(repoChecks).toHaveLength(12);
+  it("defines R1-R13 repo checks", () => {
+    expect(repoChecks).toHaveLength(13);
     const ids = repoChecks.map((c) => c.id);
-    expect(ids).toEqual(["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10", "R11", "R12"]);
+    expect(ids).toEqual(["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10", "R11", "R12", "R13"]);
   });
 
   it("defines I1-I7, S1-S3, F1 issue rules", () => {
@@ -21,12 +21,12 @@ describe("waveforge scaffold", () => {
     const report = await runRepoChecks(".");
     expect(report.kind).toBe("repo");
     expect(report.target).toBe(".");
-    expect(report.results.length).toBe(12);
+    expect(report.results.length).toBe(13);
     expect(report.score).toBe(100);
     expect(report.summary?.pass).toBe(8);
     expect(report.summary?.warn).toBe(0);
-    expect(report.summary?.skipped).toBe(4);
-    expect(report.summary?.total).toBe(12);
+    expect(report.summary?.skipped).toBe(5);
+    expect(report.summary?.total).toBe(13);
   });
 
   it("lints issue markdown returning report", async () => {

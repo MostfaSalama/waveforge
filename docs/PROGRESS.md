@@ -372,3 +372,16 @@
   - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
   - `node .\node_modules\vitest\vitest.mjs run`: passed (11 test files passed; 132 passed, 1 skipped integration test)
 - **Open issues**: None.
+
+## 2026-11-18 - Step 17: Phase 3A - Check R13 (Automated Deployment Scripts)
+- **What was built**:
+  - Implemented `r13Check` in `src/repo/r13.ts` to inspect Soroban repositories for reproducible automated deployment scripts (`scripts/deploy.*`, `package.json` `deploy*` / `stellar contract deploy` scripts, and `Makefile` `deploy:` targets), returning `skipped` when no Soroban crates exist, `pass` with evidence when detected, and `warn` with remediation guidance when absent.
+  - Registered `r13Check` in `src/repo/index.ts` (`repoChecks` and exports).
+  - Updated `test/index.test.ts` expectations to `R1`–`R13` (13 repo checks).
+  - Added unit and integration tests in `test/r13.test.ts` (6 tests).
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (12 test files passed; 138 passed, 1 skipped integration test)
+- **Open issues**: None.
