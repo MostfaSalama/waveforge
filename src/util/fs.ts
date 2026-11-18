@@ -27,15 +27,19 @@ export async function readTextFile(filePath: string): Promise<string | null> {
   }
 }
 
-export async function findFiles(dir: string, pattern: RegExp): Promise<string[]> {
+export async function findFiles(
+  dir: string,
+  pattern: RegExp,
+  ignoredDirs: ReadonlySet<string> = new Set(["node_modules", ".git", "dist"]),
+): Promise<string[]> {
   const results: string[] = [];
   try {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
-        if (entry.name !== "node_modules" && entry.name !== ".git" && entry.name !== "dist") {
-          results.push(...(await findFiles(fullPath, pattern)));
+        if (!ignoredDirs.has(entry.name)) {
+          results.push(...(await findFiles(fullPath, pattern, ignoredDirs)));
         }
       } else if (entry.isFile() && pattern.test(entry.name)) {
         results.push(fullPath);
@@ -45,4 +49,10 @@ export async function findFiles(dir: string, pattern: RegExp): Promise<string[]>
     // ignore inaccessible directories
   }
   return results;
+}
+
+const RUST_IGNORED_DIRS = new Set(["target", "node_modules", ".git", "dist", "fixtures"]);
+
+export async function findRustFiles(dir: string): Promise<string[]> {
+  return findFiles(dir, /\.rs$/, RUST_IGNORED_DIRS);
 }

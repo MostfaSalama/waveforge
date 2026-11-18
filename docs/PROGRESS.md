@@ -358,3 +358,17 @@
   - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
   - `node .\node_modules\vitest\vitest.mjs run`: passed (10 test files passed; 128 passed, 1 skipped integration test)
 - **Open issues**: None.
+
+## 2026-11-18 - Step 16: Phase 2B - Check R12 (Contract State Authorization)
+- **What was built**:
+  - Extracted `findRustFiles` into `src/util/fs.ts` and updated `src/repo/r11.ts` to share it without duplication.
+  - Implemented `r12Check` in `src/repo/r12.ts` to statically analyze public functions (`pub fn`) in Soroban Rust contract sources (`*.rs`, skipping test files and `#[cfg(test)]` blocks) to verify that state-mutating functions invoke `require_auth()` or `require_auth_for_args()`.
+  - Registered `r12Check` in `src/repo/index.ts` (`repoChecks` and exports).
+  - Updated `test/index.test.ts` expectations to `R1`–`R12` (12 repo checks).
+  - Added unit and integration tests in `test/r12.test.ts` (4 tests).
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (11 test files passed; 132 passed, 1 skipped integration test)
+- **Open issues**: None.

@@ -1,32 +1,10 @@
-import { promises as fs } from "node:fs";
 import path from "node:path";
 import type { CheckResult } from "../report.js";
-import { readTextFile } from "../util/fs.js";
+import { findRustFiles, readTextFile } from "../util/fs.js";
 import type { CheckOptions } from "./index.js";
 import { r7Check } from "./r7.js";
 
 const TTL_CALL_REGEX = /\b(?:extend_ttl(?:_instance)?|extend_instance_ttl)\s*\(/;
-const IGNORED_DIRS = new Set(["target", "node_modules", ".git", "dist", "fixtures"]);
-
-async function collectRustFiles(dir: string): Promise<string[]> {
-  const results: string[] = [];
-  try {
-    const entries = await fs.readdir(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        if (!IGNORED_DIRS.has(entry.name)) {
-          results.push(...(await collectRustFiles(fullPath)));
-        }
-      } else if (entry.isFile() && entry.name.endsWith(".rs")) {
-        results.push(fullPath);
-      }
-    }
-  } catch {
-    // ignore unreadable directories
-  }
-  return results;
-}
 
 /**
  * R11: Checks whether Soroban smart contracts manage storage lifetimes
@@ -49,7 +27,7 @@ export async function r11Check(root: string, options: CheckOptions = {}): Promis
     };
   }
 
-  const rustFiles = await collectRustFiles(root);
+  const rustFiles = await findRustFiles(root);
   const evidence: string[] = [];
 
   for (const filePath of rustFiles) {
