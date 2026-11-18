@@ -144,6 +144,14 @@ describe("CLI process exit codes", () => {
     expect(mdRes.stdout).toContain("## WaveForge Repository Report");
   });
 
+  it("supports --format=sarif", () => {
+    const sarifRes = runCli(["repo", ".", "--format=sarif"]);
+    expect(sarifRes.status).toBe(0);
+    const parsed = JSON.parse(sarifRes.stdout) as { version: string; runs: unknown[] };
+    expect(parsed.version).toBe("2.1.0");
+    expect(parsed.runs).toHaveLength(1);
+  });
+
   it("supports --json boolean flag", () => {
     const jsonRes = runCli(["repo", ".", "--json"]);
     expect(jsonRes.status).toBe(0);

@@ -385,3 +385,16 @@
   - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
   - `node .\node_modules\vitest\vitest.mjs run`: passed (12 test files passed; 138 passed, 1 skipped integration test)
 - **Open issues**: None.
+
+## 2026-11-18 - Step 18: Phase 4A - SARIF v2.1.0 Output Format Support
+- **What was built**:
+  - Implemented `formatSarif(report)` in `src/sarif.ts` generating SARIF v2.1.0 JSON (`$schema`, `version: "2.1.0"`, `tool.driver.rules`, `results` for `fail`/`warn` statuses with `error`/`warning` level mappings and physical `file:line` location extraction from evidence).
+  - Exported `formatSarif` in `src/index.ts`.
+  - Wired `--format=sarif` and `--sarif` flags in `src/cli.ts`.
+  - Updated public API snapshot test in `test/index.test.ts` and added unit + CLI integration tests in `test/sarif.test.ts` and `test/cli.test.ts`.
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (13 test files passed; 140 passed, 1 skipped integration test)
+- **Open issues**: None.

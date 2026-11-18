@@ -47,6 +47,7 @@ describe("waveforge scaffold", () => {
     expect(exportsList).toEqual([
       "formatJson",
       "formatMarkdown",
+      "formatSarif",
       "formatText",
       "runIssueLint",
       "runRepoChecks",

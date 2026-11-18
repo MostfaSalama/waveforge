@@ -9,3 +9,4 @@ export {
   type CheckResult,
   type Report,
 } from "./report.js";
+export { formatSarif } from "./sarif.js";
