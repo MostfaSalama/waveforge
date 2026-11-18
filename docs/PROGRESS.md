@@ -398,3 +398,15 @@
   - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
   - `node .\node_modules\vitest\vitest.mjs run`: passed (13 test files passed; 140 passed, 1 skipped integration test)
 - **Open issues**: None.
+
+## 2026-11-18 - Step 19: Phase 4B - Active Scaffolding Mode (`--fix`)
+- **What was built**:
+  - Implemented `applyRepoFixes` in `src/fix.ts` to scaffold missing `CONTRIBUTING.md` (R3), `SECURITY.md` (R4), and `.github/ISSUE_TEMPLATE/{config,bug,feature}.yml` (R5) when checks fail or warn, preserving existing customized files unless `force: true` is passed.
+  - Wired `--fix` (and `--force` override) into the `repo` CLI command in `src/cli.ts`, re-evaluating checks after scaffolding so the output report reflects resolved checks.
+  - Added unit and CLI integration tests in `test/fix.test.ts` (3 tests).
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\tsup\dist\cli-default.js`: passed (`dist/index.js`, `dist/cli.js`, `dist/index.d.ts` built)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (14 test files passed; 143 passed, 1 skipped integration test)
+- **Open issues**: None.

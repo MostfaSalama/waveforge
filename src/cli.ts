@@ -7,6 +7,7 @@ import { runIssueLint } from "./issue/index.js";
 import { initAction } from "./init-action.js";
 import { formatText, formatMarkdown, formatJson, type Report } from "./report.js";
 import { formatSarif } from "./sarif.js";
+import { applyRepoFixes } from "./fix.js";
 
 function getPackageVersion(): string {
   try {
@@ -23,7 +24,7 @@ function printHelp(): void {
   console.log(`waveforge - Stellar Wave readiness checker and issue linter
 
 Usage:
-  waveforge repo [path] [--network=<net>] [--rpc-url=<url>] [--offline] [--json] [--markdown] [--sarif] [--format=text|markdown|json|sarif] [--min-score=N]
+  waveforge repo [path] [--network=<net>] [--rpc-url=<url>] [--offline] [--fix] [--force] [--json] [--markdown] [--sarif] [--format=text|markdown|json|sarif] [--min-score=N]
   waveforge issue <file|-> [--title=<title>] [--json] [--markdown] [--sarif] [--format=text|markdown|json|sarif] [--min-score=N]
   waveforge init-action [--force] [--ref=<ref>]
   waveforge --help
@@ -36,7 +37,8 @@ Options:
   --network=<net>   Target Stellar network: testnet (default) or mainnet
   --rpc-url=<url>   Explicit Soroban RPC URL (required for mainnet)
   --offline         Skip network calls and mark network checks as skipped
-  --force           Overwrite existing .github/workflows/waveforge.yml
+  --fix             Scaffold missing community files and issue templates
+  --force           Overwrite existing workflow or scaffolded files
   --ref=<ref>       Custom GitHub Action ref (default from package.json)
   --json            Output report as JSON
   --markdown        Output report as Markdown
@@ -87,6 +89,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<numb
         offline: { type: "boolean", default: false },
         network: { type: "string", default: "testnet" },
         "rpc-url": { type: "string" },
+        fix: { type: "boolean", default: false },
         force: { type: "boolean", default: false },
         ref: { type: "string" },
         json: { type: "boolean", default: false },
@@ -153,7 +156,16 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<numb
     }
 
     try {
-      const report = await runRepoChecks(repoPath, { offline, network, rpcUrl });
+      let report = await runRepoChecks(repoPath, { offline, network, rpcUrl });
+      if (values.fix) {
+        const fixedFiles = await applyRepoFixes(resolvedPath, report.results, {
+          force: Boolean(values.force),
+        });
+        if (fixedFiles.length > 0) {
+          console.error(`Scaffolded ${fixedFiles.length} file(s): ${fixedFiles.join(", ")}`);
+          report = await runRepoChecks(repoPath, { offline, network, rpcUrl });
+        }
+      }
       printFormattedReport(report, format);
 
       const hasFail = report.results.some((r) => r.status === "fail");
