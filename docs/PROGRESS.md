@@ -335,3 +335,13 @@
   - `gh issue create`: created issues #1 through #9 on GitHub
 - **Open issues**: None.
 
+
+## 2026-11-18 - Step 14: Phase 1 - Test Suite Stability & Reliability Hardening
+- **What was built**:
+  - Updated `vitest.config.ts` `testTimeout` from `20000` ms to `45000` ms to accommodate multi-process CLI tests on slower runners and Windows.
+  - Refactored `test/cli.test.ts` by splitting combined `--format=json`/`--format=markdown` and `--json`/`--markdown` tests into 4 separate single-assertion tests (`supports --format=json`, `supports --format=markdown`, `supports --json boolean flag`, `supports --markdown boolean flag`) to eliminate sequential double-spawn timeouts and improve test isolation.
+- **Commands run with results**:
+  - `node .\node_modules\eslint\bin\eslint.js .`: passed (0 errors, 0 warnings)
+  - `node .\node_modules\typescript\bin\tsc --noEmit`: passed (0 errors)
+  - `node .\node_modules\vitest\vitest.mjs run`: passed (9 test files passed; 124 tests passed, 1 skipped integration test)
+- **Open issues**: None.

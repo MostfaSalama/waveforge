@@ -131,23 +131,27 @@ describe("CLI process exit codes", () => {
     expect(res.status).toBe(0);
   });
 
-  it("supports --format=json and --format=markdown", () => {
+  it("supports --format=json", () => {
     const jsonRes = runCli(["repo", ".", "--format=json"]);
     expect(jsonRes.status).toBe(0);
     const parsed = JSON.parse(jsonRes.stdout);
     expect(parsed.kind).toBe("repo");
+  });
 
+  it("supports --format=markdown", () => {
     const mdRes = runCli(["repo", ".", "--format=markdown"]);
     expect(mdRes.status).toBe(0);
     expect(mdRes.stdout).toContain("## WaveForge Repository Report");
   });
 
-  it("supports --json and --markdown boolean flags", () => {
+  it("supports --json boolean flag", () => {
     const jsonRes = runCli(["repo", ".", "--json"]);
     expect(jsonRes.status).toBe(0);
     const parsed = JSON.parse(jsonRes.stdout);
     expect(parsed.kind).toBe("repo");
+  });
 
+  it("supports --markdown boolean flag", () => {
     const mdRes = runCli(["repo", ".", "--markdown"]);
     expect(mdRes.status).toBe(0);
     expect(mdRes.stdout).toContain("## WaveForge Repository Report");
